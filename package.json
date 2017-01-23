@@ -19,7 +19,7 @@
   "bugs": {
     "url": "https://github.com/romannurik/gulp-nucleus/issues"
   },
-  "devDependencies": {
+  "dependencies": {
     "gulp-front-matter": "^1.3.0",
     "gulp-if": "^2.0.2",
     "gulp-swig": "^0.8.0",

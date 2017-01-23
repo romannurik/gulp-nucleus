@@ -56,7 +56,7 @@ data/apikeys.yaml:
 html/index.html:
 
     ...
-    <script src="foo.js?key={{apikeys.fooApi}}
+    <script src="foo.js?key={{apikeys.fooApi}}"></script>
 
 ## Generate new pages from YAML data files:
 

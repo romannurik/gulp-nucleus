@@ -18,7 +18,7 @@ gulpfile.js
 
     gulp.task('html', () => {
       return gulp.src('html/**/*.html')
-        .pipe($.nucleus())
+        .pipe(gulpNucleus())
         .pipe(gulp.dest('dist'));
     });
 
@@ -43,7 +43,7 @@ gulpfile.js:
 
     gulp.task('html', () => {
       return gulp.src('html/**/*.html')
-        .pipe($.nucleus({
+        .pipe(gulpNucleus({
           dataPath: 'data'
         }))
         .pipe(gulp.dest('dist'));
@@ -66,7 +66,7 @@ gulpfile.js:
 
     gulp.task('html', () => {
       return gulp.src('html/**/*.html')
-        .pipe($.nucleus({
+        .pipe(gulpNucleus({
           dataPath: 'data'
         }))
         .pipe(gulp.dest('dist'));

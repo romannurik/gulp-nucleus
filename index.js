@@ -17,21 +17,28 @@
 const fs = require('fs');
 const path = require('path');
 const streamCombiner = require('stream-combiner');
-const swig = require('swig');
-const swigExtras = require('swig-extras');
+const nunjucksOrig = require('nunjucks');
 const through = require('through2');
 const yaml = require('js-yaml');
 
+const nunjucksMarkdown = require('nunjucks-markdown');
+const marked = require('marked');
+
+const gulpData = require('gulp-data');
 const gulpFrontMatter = require('gulp-front-matter');
 const gulpIf = require('gulp-if');
-const gulpSwig = require('gulp-swig');
+const gulpNunjucks = require('gulp-nunjucks');
 const gulpTap = require('gulp-tap');
 const gulpUtil = require('gulp-util');
 
 const PLUGIN_NAME = 'gulp-nucleus';
 
 module.exports = function gulpNucleus(options = {}) {
-  let {dataPath, setupSwig} = options;
+  let {templateRootPath, dataPath, nunjucks, setupNunjucks, markedOptions} = options;
+  if (!nunjucks) {
+    nunjucks = nunjucksOrig;
+  }
+
   let globalData = {};
   let pages = [];
 
@@ -45,6 +52,11 @@ module.exports = function gulpNucleus(options = {}) {
       }
     });
   }
+
+  let nunjucksEnv = new nunjucks.Environment(new nunjucks.FileSystemLoader(templateRootPath));
+  nunjucksMarkdown.register(nunjucksEnv, marked);
+  markedOptions && marked.setOptions(markedOptions);
+  setupNunjucks && setupNunjucks(nunjucksEnv, nunjucks);
 
   return streamCombiner(
       // extract frontmatter
@@ -69,7 +81,7 @@ module.exports = function gulpNucleus(options = {}) {
           newFile.contextData = Object.assign({}, file.contextData);
           newFile.contextData[gen.variable] = item;
           newFile.path = path.join(newFile.base,
-              swig.render(gen.filename, {locals: newFile.contextData}));
+              nunjucks.renderString(gen.filename, {locals: newFile.contextData}));
           this.push(newFile);
         });
         cb();
@@ -88,17 +100,9 @@ module.exports = function gulpNucleus(options = {}) {
         file.contextData = Object.assign(file.contextData, {all_pages: pages});
       }),
       // run everything through swig templates
-      gulpSwig({
-        setup: sw => {
-          swigExtras.useTag(sw, 'markdown');
-          swigExtras.useFilter(sw, 'markdown');
-          swigExtras.useFilter(sw, 'trim');
-          setupSwig && setupSwig(sw);
-        },
-        data: file => file.contextData,
-        defaults: {
-          cache: false
-        }
+      gulpData(file => file.contextData),
+      gulpNunjucks.compile({}, {
+        env: nunjucksEnv,
       })
       );
 };

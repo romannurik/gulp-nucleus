@@ -1,13 +1,13 @@
 # gulp-nucleus
-An opinionated approach to generating static HTML using gulp and swig templates.
+An opinionated approach to generating static HTML using gulp and Nunjucks (as of v0.1.0) templates.
 
 ## What is it?
 
 The plugin is a simple static site generator that:
 
 - Is designed for use in [gulp](http://gulpjs.com/). See example usage below.
-- Uses [swig](https://github.com/paularmstrong/swig) for templating.
-- Adds markdown support from [swig-extras](https://github.com/paularmstrong/swig-extras).
+- Uses [Nunjucks](https://mozilla.github.io/nunjucks/) for templating.
+- Adds markdown support from [marked](https://github.com/markedjs/marked).
 - Supports YAML [front-matter](https://github.com/jxson/front-matter) to pass data to swig templates.
 - Supports YAML data files as additional data to pass to swig templates. See example below.
 - Supports generating new pages from YAML data files. See example below.
@@ -30,7 +30,7 @@ html/index.html
     <!doctype html>
     <html>
     <head><title>
-      {{ title }} <!-- rendered using swig -->
+      {{ title }} <!-- rendered using Nunjucks -->
     </title></head>
     <body>
     Hello world!

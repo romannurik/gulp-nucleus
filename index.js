@@ -80,8 +80,14 @@ module.exports = function gulpNucleus(options = {}) {
           let newFile = file.clone();
           newFile.contextData = Object.assign({}, file.contextData);
           newFile.contextData[gen.variable] = item;
+          if (gen.frontMatter) {
+            // generated front matter
+            for (let k in gen.frontMatter) {
+              newFile.contextData[k] = nunjucks.renderString(gen.frontMatter[k], newFile.contextData);
+            }
+          }
           newFile.path = path.join(newFile.base,
-              nunjucks.renderString(gen.filename, {locals: newFile.contextData}));
+              nunjucks.renderString(gen.filename, newFile.contextData));
           this.push(newFile);
         });
         cb();

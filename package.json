@@ -1,6 +1,6 @@
 {
   "name": "gulp-nucleus",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An opinionated approach to rendering static HTML using nunjucks",
   "main": "index.js",
   "scripts": {
